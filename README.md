@@ -21,7 +21,7 @@ Potelo\GuPayment\GuPaymentServiceProvider::class,
 
 Agora, configure as variáveis utilizadas pelo GuPayment no seu .env:
 
-```
+```ini
 IUGU_APIKEY=SUA_CHAVE
 IUGU_ID=SEU_ID_IUGU
 GUPAYMENT_SIGNATURE_TABLE=subscriptions
@@ -439,7 +439,7 @@ $user->charge(100, [
 
 Por padrão um item será criado com as seguintes definições:
 
-```php
+```ini
 description = 'Nova cobrança'
 quantity = 1
 price_cents = Valor do primeiro parâmetro
