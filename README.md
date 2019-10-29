@@ -21,7 +21,7 @@ Potelo\GuPayment\GuPaymentServiceProvider::class,
 
 Agora, configure as variáveis utilizadas pelo GuPayment no seu .env:
 
-```
+```ini
 IUGU_APIKEY=SUA_CHAVE
 IUGU_ID=SEU_ID_IUGU
 GUPAYMENT_SIGNATURE_TABLE=subscriptions
@@ -396,7 +396,7 @@ $user->createCard($creditCardToken);
 
 O método aceita um array como segundo argumento com as opções disponíveis para criação de um método de pagamento. O cartão é criado sendo definido como `default` nos cartões do cliente. Se quiser alterar esse comportamento passe a chave `set_as_default` com o valor `false` nas opções do segundo parâmetro do método:
 
-```
+```php
 $user->createCard($creditCardToken, [
     'set_as_default' => false,
 ]);
@@ -453,7 +453,7 @@ $user->charge(100, [
 
 Por padrão um item será criado com as seguintes definições:
 
-```
+```ini
 description = 'Nova cobrança'
 quantity = 1
 price_cents = Valor do primeiro parâmetro
@@ -461,7 +461,7 @@ price_cents = Valor do primeiro parâmetro
 
 Sinta-se livre para adicionar seus próprios items como preferir no segundo parâmetro:
 
-```
+```php
 $user->charge(null, [
     'items' => [
         ['description' => 'Primeiro Item', 'quantity' => 10, 'price_cents' => 200],
