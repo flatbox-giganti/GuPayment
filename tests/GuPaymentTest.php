@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use Illuminate\Support\Collection;
 use Potelo\GuPayment\Tests\Fixtures\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Escavador\Notifications\NotificationDecorator;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Potelo\GuPayment\Http\Controllers\WebhookController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -133,9 +134,16 @@ class GuPaymentTest extends TestCase
         $this->assertFalse($subscription->cancelled());
         $this->assertFalse($subscription->onGracePeriod());
 
+        $simulation = $subscription->swapPlanSimulation('silver');
+
+        $this->assertEquals(500, $simulation->cost);
+        $this->assertEquals(2500, $simulation->discount);
+        $this->assertEquals(2, $simulation->cycles);
+        $this->assertEquals('gold', $simulation->old_plan);
+        $this->assertEquals('silver', $simulation->new_plan);
+
         // Swap Plan
         $subscription->swap('silver');
-
         $this->assertEquals('silver', $subscription->{$this->iuguSubscriptionModelPlanColumn});
 
         // Invoice Tests

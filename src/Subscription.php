@@ -4,7 +4,7 @@ namespace Potelo\GuPayment;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\Console\Exception\LogicException;
+use Potelo\GuPayment\Iugu\IuguSubscriptionDecorator;
 
 class Subscription extends Model
 {
@@ -114,6 +114,23 @@ class Subscription extends Model
      * Swap the subscription to a new Iugu plan.
      *
      * @param  string  $plan
+     * @return bool|\Iugu_SearchResult
+     */
+    public function swapPlanSimulation($plan)
+    {
+        $subscription = $this->asIuguSubscription();
+
+        $decorated = new IuguSubscriptionDecorator($subscription);
+
+        $simulation = $decorated->change_plan_simulation($plan);
+
+        return $simulation;
+    }
+
+    /**
+     * Swap the subscription to a new Iugu plan.
+     *
+     * @param  string  $plan
      * @return $this
      */
     public function swap($plan)
@@ -121,9 +138,6 @@ class Subscription extends Model
         $subscription = $this->asIuguSubscription();
 
         $subscription->change_plan($plan);
-
-        //$this->user->invoice();
-
 
         $this->fill([
             $this->iuguSubscriptionModelPlanColumn => $plan,
