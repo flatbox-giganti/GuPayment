@@ -249,7 +249,7 @@ $user->subscription('main')->swap('silver');
 Ao utilizar o método `swap`, [uma Fatura cobrando a mudança de plano](https://support.iugu.com/hc/pt-br/articles/201727517-Como-funcionam-as-trocas-de-planos-durante-o-per%C3%ADodo-de-uso-) poderá ser gerada para o cliente. Para simular os custos da alteração de plano, 
 basta utilizar o método `swapPlanSimulation`:
 ```php
-$simulation = $subscription->swapPlanSimulation('silver');
+$simulation = $user->subscription('main')->swapPlanSimulation('silver');
 
 $cost = $simulation->cost;
 $discount = $simulation->discount;
