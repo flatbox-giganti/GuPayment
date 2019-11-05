@@ -90,7 +90,7 @@ class Subscription extends Model
     public function onTrial()
     {
         if (! is_null($this->trial_ends_at)) {
-            return Carbon::today()->lt($this->trial_ends_at);
+            return Carbon::now()->lt($this->trial_ends_at);
         } else {
             return false;
         }
@@ -197,6 +197,9 @@ class Subscription extends Model
      */
     public function markAsCancelled()
     {
+        if ($this->onTrial()) {
+            $this->fill(['trial_ends_at' => Carbon::now()]);
+        }
         $this->fill(['ends_at' => Carbon::now()])->save();
     }
 
