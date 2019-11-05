@@ -264,6 +264,10 @@ Para cancelar uma assinatura, basta chamar o método `cancel` na assinatura do u
 ```php
 $user->subscription('main')->cancel();
 ```
+Ao cancelar uma assinatura, ela continua ativa até o dia do vencimento. Para cancelar uma assinatura imediatamente utilize o método `cancelNow`:
+```php
+$user->subscription('main')->cancelNow();
+```
 
 ### Reativando assinaturas
 Se um usuário tem uma assinatura cancelada e gostaria de reativá-la, basta utilizar o método `resume`. Ele precisa está no "período de carência" para conseguir reativá-la:
