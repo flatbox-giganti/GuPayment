@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.6",
-        "flatbox-giganti/iugu": "1.0.6",
+        "flatbox-giganti/iugu": "1.0.7",
         "dompdf/dompdf": "^0.8.0"
     },
     "require-dev": {
