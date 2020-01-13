@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use Illuminate\Support\Collection;
 use Potelo\GuPayment\Tests\Fixtures\User;
 use Illuminate\Database\Capsule\Manager as DB;
-use Escavador\Notifications\NotificationDecorator;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Potelo\GuPayment\Http\Controllers\WebhookController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
