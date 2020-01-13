@@ -29,6 +29,8 @@ class Subscription extends Model
 
     protected $iuguSubscriptionModelPlanColumn;
 
+    protected $cacheIuguSubscription;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -90,7 +92,7 @@ class Subscription extends Model
     public function onTrial()
     {
         if (! is_null($this->trial_ends_at)) {
-            return Carbon::now()->lt($this->trial_ends_at);
+            return Carbon::today()->lt($this->trial_ends_at);
         } else {
             return false;
         }
@@ -224,14 +226,25 @@ class Subscription extends Model
         return $this;
     }
 
+    /**
+     * @param $iuguSubscription
+     */
+    public function setCacheIuguSubscription($iuguSubscription)
+    {
+        $this->cacheIuguSubscription = $iuguSubscription;
+    }
 
     /**
      * Get the subscription as a Iugu subscription object.
      *
      * @return \Iugu_Subscription
      */
-    public function asIuguSubscription()
+    public function asIuguSubscription($useCache = false)
     {
-        return $this->user->getIuguSubscription($this->{$this->iuguSubscriptionModelIdColumn});
+        if ( $useCache && ! is_null($this->cacheIuguSubscription) ) {
+            return $this->cacheIuguSubscription;
+        }
+
+        return $this->cacheIuguSubscription = $this->user->getIuguSubscription($this->{$this->iuguSubscriptionModelIdColumn});
     }
 }

@@ -211,6 +211,8 @@ class SubscriptionBuilder
             }
         }
 
+        $subscription->setCacheIuguSubscription($subscriptionIugu);
+
         return $this->user->subscriptions()->save($subscription);
     }
 
