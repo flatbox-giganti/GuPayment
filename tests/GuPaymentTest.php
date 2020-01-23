@@ -145,13 +145,29 @@ class GuPaymentTest extends TestCase
         $subscription->swap('silver');
         $this->assertEquals('silver', $subscription->{$this->iuguSubscriptionModelPlanColumn});
 
+        // Delay, wait for iugu register invoice
+        sleep(2);
+
         // Invoice Tests
         $invoices = $user->invoices();
         $invoice = $invoices->first();
 
-        //$this->assertEquals('R$ 15,00', $invoice->total());
-        //$this->assertFalse($invoice->hasDiscount());
-        //$this->assertInstanceOf(Carbon::class, $invoice->date());
+        $this->assertEquals('R$ 5,00', $invoice->total());
+        $this->assertEquals($invoice->items[0]->description, 'Mudança de Plano: [antigo] Silver');
+        $this->assertFalse($invoice->hasDiscount());
+        $this->assertInstanceOf(Carbon::class, $invoice->date());
+
+        // Swap plan, but skip charge
+        // Swap Plan
+        $subscription->swap('gold', true);
+        $this->assertEquals('gold', $subscription->{$this->iuguSubscriptionModelPlanColumn});
+
+        // Delay, wait for iugu register invoice
+        sleep(2);
+
+        // no new invoice created
+        $invoices = $user->invoices();
+        $this->assertEquals(2, $invoices->count());
 
         $user = $this->createUser();
 

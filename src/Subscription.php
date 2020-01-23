@@ -132,14 +132,22 @@ class Subscription extends Model
     /**
      * Swap the subscription to a new Iugu plan.
      *
-     * @param  string  $plan
+     * @param string $plan
+     * @param bool $skipCharge
      * @return $this
      */
-    public function swap($plan)
+    public function swap($plan, $skipCharge = false)
     {
         $subscription = $this->asIuguSubscription();
 
-        $subscription->change_plan($plan);
+        // if skip charge, use put method
+        if ($skipCharge) {
+            $subscription->plan_identifier = $plan;
+            $subscription->skip_charge = true;
+            $subscription->save();
+        } else {
+            $subscription->change_plan($plan);
+        }
 
         $this->fill([
             $this->iuguSubscriptionModelPlanColumn => $plan,
@@ -199,9 +207,6 @@ class Subscription extends Model
      */
     public function markAsCancelled()
     {
-        if ($this->onTrial()) {
-            $this->fill(['trial_ends_at' => Carbon::now()]);
-        }
         $this->fill(['ends_at' => Carbon::now()])->save();
     }
 

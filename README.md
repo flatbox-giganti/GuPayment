@@ -259,6 +259,14 @@ $newPlan = $simulation->new_plan;
 $expiresAt = $simulation->expires_at;
 ```
 
+Para mudar de plano sem cobrança proporcional, basta passar o segundo parâmetro como `true`:
+```php
+$user = App\User::find(1);
+
+$skipCharge = true;
+$user->subscription('main')->swap('silver', $skipCharge);
+```
+
 ### Cancelando assinaturas
 Para cancelar uma assinatura, basta chamar o método `cancel` na assinatura do usuário:
 ```php
