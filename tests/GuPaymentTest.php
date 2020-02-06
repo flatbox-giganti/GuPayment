@@ -267,7 +267,12 @@ class GuPaymentTest extends TestCase
 
         $card = $cards->first()->asIuguCard()->data;
 
-        $this->assertEquals($token->extra_info, $card);
+        $this->assertEquals($token->extra_info->bin, $card->bin);
+        $this->assertEquals($token->extra_info->year, $card->year);
+        $this->assertEquals($token->extra_info->month, $card->month);
+        $this->assertEquals(strtolower($token->extra_info->brand), strtolower($card->brand));
+        $this->assertEquals($token->extra_info->holder_name, $card->holder);
+        $this->assertEquals($token->extra_info->display_number, $card->display_number);
     }
 
     public function testCreateCardsToIuguCustomer()
@@ -277,7 +282,12 @@ class GuPaymentTest extends TestCase
         $user->createAsIuguCustomer($token = $this->getTestToken());
         $card = $user->createCard($token = $this->getTestTokenMasterCard());
 
-        $this->assertEquals($token->extra_info, $card->asIuguCard()->data);
+        $this->assertEquals($token->extra_info->bin, $card->data->bin);
+        $this->assertEquals($token->extra_info->year, $card->data->year);
+        $this->assertEquals($token->extra_info->month, $card->data->month);
+        $this->assertEquals(strtolower($token->extra_info->brand), strtolower($card->data->brand));
+        $this->assertEquals($token->extra_info->holder_name, $card->data->holder);
+        $this->assertEquals($token->extra_info->display_number, $card->data->display_number);
     }
 
     public function testCreateCardWithoutIuguCustomer()
