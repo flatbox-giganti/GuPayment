@@ -757,6 +757,7 @@ class GuPaymentTest extends TestCase
                 "month" => "12",
                 "year" => Carbon::now()->addYear()->year,
             ],
+            "test" => 1
         ]);
     }
 
@@ -775,6 +776,7 @@ class GuPaymentTest extends TestCase
                 "month" => "12",
                 "year" => Carbon::now()->addYear()->year,
             ],
+            "test" => 1
         ]);
     }
 
@@ -793,6 +795,7 @@ class GuPaymentTest extends TestCase
                 "month" => "12",
                 "year" => Carbon::now()->addYear()->year,
             ],
+            "test" => 1
         ]);
     }
 
