@@ -187,6 +187,10 @@ class SubscriptionBuilder
         $subscriptionIugu = $this->user->createIuguSubscription($this->buildPayload($customer->id));
 
         if (isset($subscriptionIugu->errors)) {
+            if (isset($subscriptionIugu->LR)) {
+                $this->lr = $subscriptionIugu->LR;
+            }
+
             $this->lastError = $subscriptionIugu->errors;
             return false;
         }
