@@ -257,21 +257,34 @@ trait GuPaymentTrait
     /**
      * Create a Iugu subscription.
      *
-     * @param $subscription
-     * @return \IuguSubscription
+     * @param $options
+     * @return IuguSubscription
      */
-    public function createIuguSubscription($subscription)
+    public function createIuguSubscription($options)
     {
         Iugu::setApiKey($this->getApiKey());
 
-        return IuguSubscription::create($subscription);
+        return IuguSubscription::create($options);
+    }
+
+    /**
+     * Create a Iugu invoice.
+     *
+     * @param $options
+     * @return IuguInvoice
+     */
+    public function createIuguInvoice($options)
+    {
+        Iugu::setApiKey($this->getApiKey());
+
+        return IuguInvoice::create($options);
     }
 
     /**
      * Get a Iugu subscription.
      *
      * @param $subscriptionId
-     * @return \IuguSubscription
+     * @return IuguSubscription
      */
     public function getIuguSubscription($subscriptionId)
     {
