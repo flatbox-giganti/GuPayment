@@ -696,6 +696,16 @@ class GuPaymentTest extends TestCase
 
         $this->assertEquals($invoice->payable_with, 'all');
         $this->assertEquals($invoice->total, 'R$ 1,00');
+
+        $invoice = $user->newInvoice(Carbon::now());
+
+        $invoice->addItem(100, 'Item 1', 1);
+        $invoice->addItem( 200);
+        $invoice = $invoice->create($options);
+
+        $this->assertEquals($invoice->payable_with, 'all');
+        $this->assertEquals($invoice->total, 'R$ 3,00');
+
     }
 
     public function testCreatingSubscriptionWithRecurrentDiscount()

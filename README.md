@@ -375,9 +375,25 @@ return $user->downloadInvoice($invoiceId, [
     ]);
 ```
 
+
+### Faturas avulsas
+
+Se você precisar criar faturas avulsas, que não estejam relacionadas a assinatura, basta usar o método `createInvoice`: 
+```php
+$invoice = $user->createInvoice($priceCents, $dueDate, $description, $options);
+```
+Caso você precise gerar uma fatura com vários itens, utilize os métodos `newInvoice`, `addItem` e `create`:
+```php
+$invoiceBuilder = $user->newInvoice($dueDate);
+foreach ($itens as $item) {
+    $invoiceBuilder->addItem($item['priceCents'], $item['description'], $item['quantity']);
+}
+$invoice = $invoiceBuilder->create($options);
+```
+
 ### Reembolsar Fatura
 
-Para reembolsar uma fatura utilize o método `refund`.
+Para reembolsar uma fatura utilize o método `refund`:
 ```php
 // Iugu aceita cobranças em centavos
 $user->refund($invoiceId);
@@ -444,7 +460,6 @@ Para deletar todos os cartões use `deleteCards`:
 ```php
 $user->deleteCards();
 ```
-
 
 ## Cobrança simples
 
