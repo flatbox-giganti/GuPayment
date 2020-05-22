@@ -1,9 +1,20 @@
 # GuPayment
 
-[![Build Status](https://travis-ci.org/Potelo/GuPayment.svg?branch=master)](https://travis-ci.org/Potelo/GuPayment)
-<a href='https://coveralls.io/github/Potelo/GuPayment?branch=master'><img src='https://coveralls.io/repos/github/Potelo/GuPayment/badge.svg?branch=master' alt='Coverage Status' /></a>
+<p align="center"><img src="https://user-images.githubusercontent.com/3699061/82709406-ea491500-9c56-11ea-94e0-08fbc73c4dc9.png"></p>
+
+<p align="center">
+<a href='https://travis-ci.org/Potelo/GuPayment'>
+    <img alt="Build status" src="https://travis-ci.org/Potelo/GuPayment.svg?branch=master">
+</a>
+    
+<a href='https://coveralls.io/github/Potelo/GuPayment?branch=master'>
+    <img src='https://coveralls.io/repos/github/Potelo/GuPayment/badge.svg?branch=master' alt='Coverage Status' />
+</a>
+    
 <img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/potelo/gu-payment?color=%230b7cbd">
+
 <img alt="Packagist Version" src="https://img.shields.io/packagist/v/potelo/gu-payment?color=%2333a2d8">
+</p>
 
 ## Introdução
 
