@@ -157,6 +157,16 @@ class GuPaymentTest extends TestCase
         $this->assertFalse($invoice->hasDiscount());
         $this->assertInstanceOf(Carbon::class, $invoice->date());
 
+
+        // Invoice PDF test
+        $pdf = $user->downloadInvoice($invoice->id, [
+                'vendor'  => 'Sua Empresa',
+                'product' => 'Seu Produto'
+        ]);
+
+        // Then just save it like this
+        $this->assertStringStartsWith('%PDF-1.3', $pdf->getContent());
+
         // Swap plan, but skip charge
         // Swap Plan
         $subscription->swap('gold', true);
@@ -705,7 +715,6 @@ class GuPaymentTest extends TestCase
 
         $this->assertEquals($invoice->payable_with, 'all');
         $this->assertEquals($invoice->total, 'R$ 3,00');
-
     }
 
     public function testCreatingSubscriptionWithRecurrentDiscount()
