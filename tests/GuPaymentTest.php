@@ -24,7 +24,7 @@ class GuPaymentTest extends TestCase
 
     protected $iuguSubscriptionModelPlanColumn;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass() : void
     {
         if (file_exists(__DIR__.'/../.env')) {
             $dotenv = new \Dotenv\Dotenv(__DIR__.'/../');
