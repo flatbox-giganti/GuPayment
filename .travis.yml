@@ -6,10 +6,6 @@ env:
 
 matrix:
   include:
-    - php: 7.0
-      env:
-        - testbench=3.5.x
-        - phpunit=6.0.x
     - php: 7.1
       env:
         - testbench=3.5.x

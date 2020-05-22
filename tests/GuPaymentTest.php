@@ -80,7 +80,7 @@ class GuPaymentTest extends TestCase
         $this->faker = $this->faker('pt_BR');
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->schema()->drop('users');
         $this->schema()->drop('subscriptions');
