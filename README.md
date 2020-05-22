@@ -7,6 +7,7 @@
 ## Introdução
 
 GuPayment é baseado no Laravel Cashier e fornece uma interface para controlar assinaturas do iugu.com.
+
 Compatível com Laravel 5.5+, 6.x and 7.x.
 
 ## Instalação
