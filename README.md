@@ -9,9 +9,13 @@
     <img src='https://coveralls.io/repos/github/Potelo/GuPayment/badge.svg?branch=master' alt='Coverage Status' />
 </a>
     
+<a href='https://packagist.org/packages/potelo/gu-payment'>
 <img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/potelo/gu-payment?color=%230b7cbd">
+</a>
 
-<img alt="Packagist Version" src="https://img.shields.io/packagist/v/potelo/gu-payment?color=%2333a2d8">
+<a href='https://packagist.org/packages/potelo/gu-payment'>
+    <img alt="Packagist Version" src="https://img.shields.io/packagist/v/potelo/gu-payment?color=%2333a2d8">
+</a>
 </p>
 
 ## Introdução
