@@ -1,5 +1,3 @@
-# GuPayment
-
 <p align="center"><img src="https://user-images.githubusercontent.com/3699061/82709406-ea491500-9c56-11ea-94e0-08fbc73c4dc9.png"></p>
 
 <p align="center">
