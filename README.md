@@ -1,14 +1,17 @@
 # GuPayment
 
 [![Build Status](https://travis-ci.org/Potelo/GuPayment.svg?branch=master)](https://travis-ci.org/Potelo/GuPayment)
+<a href='https://coveralls.io/github/Potelo/GuPayment?branch=code-coverage'><img src='https://coveralls.io/repos/github/Potelo/GuPayment/badge.svg?branch=code-coverage' alt='Coverage Status' /></a>
 <img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/potelo/gu-payment?color=%230b7cbd">
 <img alt="Packagist Version" src="https://img.shields.io/packagist/v/potelo/gu-payment?color=%2333a2d8">
 
 ## Introdução
 
-GuPayment é baseado no Laravel Cashier e fornece uma interface para controlar assinaturas do iugu.com
+GuPayment é baseado no Laravel Cashier e fornece uma interface para controlar assinaturas do iugu.com.
 
-## Instalação Laravel 5.x
+Compatível com Laravel 5.5+, 6.x e 7.x.
+
+## Instalação
 
 Instale esse pacote pelo composer:
 
