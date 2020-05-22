@@ -15,9 +15,7 @@ Instale esse pacote pelo composer:
 ```
 composer require potelo/gu-payment
 ```
-
-Adicione o ServiceProvider em config/app.php
-
+Se você não utiliza o [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518), Adicione o GuPaymentServiceProvider em config/app.php
 ```php
 Potelo\GuPayment\GuPaymentServiceProvider::class,
 ```
