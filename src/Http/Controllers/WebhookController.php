@@ -3,6 +3,7 @@
 namespace Potelo\GuPayment\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Potelo\GuPayment\Subscription;
 use Illuminate\Routing\Controller;
@@ -31,7 +32,7 @@ class WebhookController extends Controller
             return;
         }*/
 
-        $method = 'handle'.studly_case(str_replace('.', '_', $payload['event']));
+        $method = 'handle'.Str::studly(str_replace('.', '_', $payload['event']));
 
         if (method_exists($this, $method)) {
             return $this->{$method}($payload);
