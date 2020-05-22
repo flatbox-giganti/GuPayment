@@ -15,9 +15,7 @@ Instale esse pacote pelo composer:
 ```
 composer require potelo/gu-payment
 ```
-
-Adicione o ServiceProvider em config/app.php
-
+Se você não utiliza o auto-discovery, Adicione o GuPaymentServiceProvider em config/app.php
 ```php
 Potelo\GuPayment\GuPaymentServiceProvider::class,
 ```
