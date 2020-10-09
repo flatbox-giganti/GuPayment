@@ -6,26 +6,6 @@ env:
 
 matrix:
   include:
-    - php: 5.6
-      env:
-        - testbench=3.2.x
-        - phpunit=5.0.x
-    - php: 5.6
-      env:
-        - testbench=3.3.x
-        - phpunit=5.0.x
-    - php: 5.6
-      env:
-        - testbench=3.4.x
-        - phpunit=5.7.x
-    - php: 7.0
-      env:
-        - testbench=3.4.x
-        - phpunit=5.7.x
-    - php: 7.0
-      env:
-        - testbench=3.5.x
-        - phpunit=6.0.x
     - php: 7.1
       env:
         - testbench=3.5.x
@@ -42,6 +22,18 @@ matrix:
       env:
         - testbench=3.6.x
         - phpunit=7.0.x
+    - php: 7.2
+      env:
+        - testbench=3.8.x
+        - phpunit=7.5.x
+    - php: 7.2
+      env:
+        - testbench=4.x
+        - phpunit=8.4.x
+    - php: 7.3
+      env:
+        - testbench=5.x
+        - phpunit=8.4.x
 
 sudo: false
 
@@ -53,3 +45,6 @@ install:
 
 script:
   - travis_retry vendor/bin/phpunit
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls -v

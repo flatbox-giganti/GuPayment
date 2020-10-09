@@ -29,6 +29,8 @@ class Subscription extends Model
 
     protected $iuguSubscriptionModelPlanColumn;
 
+    protected $cacheIuguSubscription;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -90,7 +92,7 @@ class Subscription extends Model
     public function onTrial()
     {
         if (! is_null($this->trial_ends_at)) {
-            return Carbon::now()->lt($this->trial_ends_at);
+            return Carbon::today()->lt($this->trial_ends_at);
         } else {
             return false;
         }
@@ -130,14 +132,22 @@ class Subscription extends Model
     /**
      * Swap the subscription to a new Iugu plan.
      *
-     * @param  string  $plan
+     * @param string $plan
+     * @param bool $skipCharge
      * @return $this
      */
-    public function swap($plan)
+    public function swap($plan, $skipCharge = false)
     {
         $subscription = $this->asIuguSubscription();
 
-        $subscription->change_plan($plan);
+        // if skip charge, use put method
+        if ($skipCharge) {
+            $subscription->plan_identifier = $plan;
+            $subscription->skip_charge = true;
+            $subscription->save();
+        } else {
+            $subscription->change_plan($plan);
+        }
 
         $this->fill([
             $this->iuguSubscriptionModelPlanColumn => $plan,
@@ -197,9 +207,6 @@ class Subscription extends Model
      */
     public function markAsCancelled()
     {
-        if ($this->onTrial()) {
-            $this->fill(['trial_ends_at' => Carbon::now()]);
-        }
         $this->fill(['ends_at' => Carbon::now()])->save();
     }
 
@@ -224,14 +231,25 @@ class Subscription extends Model
         return $this;
     }
 
+    /**
+     * @param $iuguSubscription
+     */
+    public function setCacheIuguSubscription($iuguSubscription)
+    {
+        $this->cacheIuguSubscription = $iuguSubscription;
+    }
 
     /**
      * Get the subscription as a Iugu subscription object.
      *
      * @return \Iugu_Subscription
      */
-    public function asIuguSubscription()
+    public function asIuguSubscription($useCache = false)
     {
-        return $this->user->getIuguSubscription($this->{$this->iuguSubscriptionModelIdColumn});
+        if ( $useCache && ! is_null($this->cacheIuguSubscription) ) {
+            return $this->cacheIuguSubscription;
+        }
+
+        return $this->cacheIuguSubscription = $this->user->getIuguSubscription($this->{$this->iuguSubscriptionModelIdColumn});
     }
 }

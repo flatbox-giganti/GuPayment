@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use Illuminate\Support\Collection;
 use Potelo\GuPayment\Tests\Fixtures\User;
 use Illuminate\Database\Capsule\Manager as DB;
-use Escavador\Notifications\NotificationDecorator;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Potelo\GuPayment\Http\Controllers\WebhookController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,7 +24,7 @@ class GuPaymentTest extends TestCase
 
     protected $iuguSubscriptionModelPlanColumn;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass() : void
     {
         if (file_exists(__DIR__.'/../.env')) {
             $dotenv = new \Dotenv\Dotenv(__DIR__.'/../');
@@ -33,7 +32,7 @@ class GuPaymentTest extends TestCase
         }
     }
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -81,7 +80,7 @@ class GuPaymentTest extends TestCase
         $this->faker = $this->faker('pt_BR');
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->schema()->drop('users');
         $this->schema()->drop('subscriptions');
@@ -146,13 +145,39 @@ class GuPaymentTest extends TestCase
         $subscription->swap('silver');
         $this->assertEquals('silver', $subscription->{$this->iuguSubscriptionModelPlanColumn});
 
+        // Delay, wait for iugu register invoice
+        sleep(2);
+
         // Invoice Tests
         $invoices = $user->invoices();
         $invoice = $invoices->first();
 
-        //$this->assertEquals('R$ 15,00', $invoice->total());
-        //$this->assertFalse($invoice->hasDiscount());
-        //$this->assertInstanceOf(Carbon::class, $invoice->date());
+        $this->assertEquals('R$ 5,00', $invoice->total());
+        $this->assertEquals($invoice->items[0]->description, 'Mudança de Plano: [antigo] Silver');
+        $this->assertFalse($invoice->hasDiscount());
+        $this->assertInstanceOf(Carbon::class, $invoice->date());
+
+
+        // Invoice PDF test
+        $pdf = $user->downloadInvoice($invoice->id, [
+                'vendor'  => 'Sua Empresa',
+                'product' => 'Seu Produto'
+        ]);
+
+        // Then just save it like this
+        $this->assertStringStartsWith('%PDF-1.3', $pdf->getContent());
+
+        // Swap plan, but skip charge
+        // Swap Plan
+        $subscription->swap('gold', true);
+        $this->assertEquals('gold', $subscription->{$this->iuguSubscriptionModelPlanColumn});
+
+        // Delay, wait for iugu register invoice
+        sleep(2);
+
+        // no new invoice created
+        $invoices = $user->invoices();
+        $this->assertEquals(2, $invoices->count());
 
         $user = $this->createUser();
 
@@ -252,7 +277,12 @@ class GuPaymentTest extends TestCase
 
         $card = $cards->first()->asIuguCard()->data;
 
-        $this->assertEquals($token->extra_info, $card);
+        $this->assertEquals($token->extra_info->bin, $card->bin);
+        $this->assertEquals($token->extra_info->year, $card->year);
+        $this->assertEquals($token->extra_info->month, $card->month);
+        $this->assertEquals(strtolower($token->extra_info->brand), strtolower($card->brand));
+        $this->assertEquals($token->extra_info->holder_name, $card->holder);
+        $this->assertEquals($token->extra_info->display_number, $card->display_number);
     }
 
     public function testCreateCardsToIuguCustomer()
@@ -262,7 +292,12 @@ class GuPaymentTest extends TestCase
         $user->createAsIuguCustomer($token = $this->getTestToken());
         $card = $user->createCard($token = $this->getTestTokenMasterCard());
 
-        $this->assertEquals($token->extra_info, $card->asIuguCard()->data);
+        $this->assertEquals($token->extra_info->bin, $card->data->bin);
+        $this->assertEquals($token->extra_info->year, $card->data->year);
+        $this->assertEquals($token->extra_info->month, $card->data->month);
+        $this->assertEquals(strtolower($token->extra_info->brand), strtolower($card->data->brand));
+        $this->assertEquals($token->extra_info->holder_name, $card->data->holder);
+        $this->assertEquals($token->extra_info->display_number, $card->data->display_number);
     }
 
     public function testCreateCardWithoutIuguCustomer()
@@ -671,6 +706,15 @@ class GuPaymentTest extends TestCase
 
         $this->assertEquals($invoice->payable_with, 'all');
         $this->assertEquals($invoice->total, 'R$ 1,00');
+
+        $invoice = $user->newInvoice(Carbon::now());
+
+        $invoice->addItem(100, 'Item 1', 1);
+        $invoice->addItem( 200);
+        $invoice = $invoice->create($options);
+
+        $this->assertEquals($invoice->payable_with, 'all');
+        $this->assertEquals($invoice->total, 'R$ 3,00');
     }
 
     public function testCreatingSubscriptionWithRecurrentDiscount()
@@ -742,6 +786,7 @@ class GuPaymentTest extends TestCase
                 "month" => "12",
                 "year" => Carbon::now()->addYear()->year,
             ],
+            "test" => 1
         ]);
     }
 
@@ -760,6 +805,7 @@ class GuPaymentTest extends TestCase
                 "month" => "12",
                 "year" => Carbon::now()->addYear()->year,
             ],
+            "test" => 1
         ]);
     }
 
@@ -778,6 +824,7 @@ class GuPaymentTest extends TestCase
                 "month" => "12",
                 "year" => Carbon::now()->addYear()->year,
             ],
+            "test" => 1
         ]);
     }
 

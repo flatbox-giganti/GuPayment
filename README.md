@@ -1,20 +1,26 @@
-# GuPayment
+<p align="center"><img src="https://user-images.githubusercontent.com/3699061/82709406-ea491500-9c56-11ea-94e0-08fbc73c4dc9.png"></p>
 
-[![Build Status](https://travis-ci.org/Potelo/GuPayment.svg?branch=master)](https://travis-ci.org/Potelo/GuPayment)
+<p align="center">
+<a href='https://travis-ci.org/Potelo/GuPayment'><img alt="Build status" src="https://travis-ci.org/Potelo/GuPayment.svg?branch=master"></a>    
+<a href='https://coveralls.io/github/Potelo/GuPayment?branch=master'><img src='https://coveralls.io/repos/github/Potelo/GuPayment/badge.svg?branch=master' alt='Coverage Status' /></a>
+<a href='https://packagist.org/packages/potelo/gu-payment'><img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/potelo/gu-payment?color=%230b7cbd"></a>
+<a href='https://packagist.org/packages/potelo/gu-payment'><img alt="Packagist Version" src="https://img.shields.io/packagist/v/potelo/gu-payment?color=%2333a2d8"></a>
+</p>
+
 ## Introdução
 
-GuPayment é baseado no Laravel Cashier e fornece uma interface para controlar assinaturas do iugu.com
+GuPayment é baseado no Laravel Cashier e fornece uma interface para controlar assinaturas do iugu.com.
 
-## Instalação Laravel 5.x
+Compatível com Laravel 5.5+, 6.x e 7.x.
+
+## Instalação
 
 Instale esse pacote pelo composer:
 
 ```
 composer require potelo/gu-payment
 ```
-
-Adicione o ServiceProvider em config/app.php
-
+Se você não utiliza o [auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518), Adicione o GuPaymentServiceProvider em config/app.php
 ```php
 Potelo\GuPayment\GuPaymentServiceProvider::class,
 ```
@@ -259,6 +265,14 @@ $newPlan = $simulation->new_plan;
 $expiresAt = $simulation->expires_at;
 ```
 
+Para mudar de plano sem cobrança proporcional, basta passar o segundo parâmetro como `true`:
+```php
+$user = App\User::find(1);
+
+$skipCharge = true;
+$user->subscription('main')->swap('silver', $skipCharge);
+```
+
 ### Cancelando assinaturas
 Para cancelar uma assinatura, basta chamar o método `cancel` na assinatura do usuário:
 ```php
@@ -367,9 +381,25 @@ return $user->downloadInvoice($invoiceId, [
     ]);
 ```
 
+
+### Faturas avulsas
+
+Se você precisar criar faturas avulsas, que não estejam relacionadas a assinatura, basta usar o método `createInvoice`: 
+```php
+$invoice = $user->createInvoice($priceCents, $dueDate, $description, $options);
+```
+Caso você precise gerar uma fatura com vários itens, utilize os métodos `newInvoice`, `addItem` e `create`:
+```php
+$invoiceBuilder = $user->newInvoice($dueDate);
+foreach ($itens as $item) {
+    $invoiceBuilder->addItem($item['priceCents'], $item['description'], $item['quantity']);
+}
+$invoice = $invoiceBuilder->create($options);
+```
+
 ### Reembolsar Fatura
 
-Para reembolsar uma fatura utilize o método `refund`.
+Para reembolsar uma fatura utilize o método `refund`:
 ```php
 // Iugu aceita cobranças em centavos
 $user->refund($invoiceId);
@@ -436,7 +466,6 @@ Para deletar todos os cartões use `deleteCards`:
 ```php
 $user->deleteCards();
 ```
-
 
 ## Cobrança simples
 
